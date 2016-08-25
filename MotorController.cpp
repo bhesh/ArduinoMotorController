@@ -8,7 +8,7 @@
 
 #define GET_DDR(P) ((P >= 2 && P <= 7) ? &DDRD : (P >= 8 && P <= 13) ? &DDRB : 0)
 #define GET_PORT(P) ((P >= 2 && P <= 7) ? &PORTD : (P >= 8 && P <= 13) ? &PORTB : 0)
-#define GET_MASK(P) (1 >> (P % 8))
+#define GET_MASK(P) (1 << (P % 8))
 #define PIN_ON(PORT, M) (PORT | M)
 #define PIN_OFF(PORT, M) (PORT & ~M)
 
