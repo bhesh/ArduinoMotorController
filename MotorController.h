@@ -21,6 +21,7 @@ struct MOTOR_REF {
 };
 
 int initMotor(MOTOR_REF &ref, int pos_pin, int neg_pin);
+int delMotor(MOTOR_REF &ref);
 int forward(MOTOR_REF &ref);
 int backward(MOTOR_REF &ref);
 int stop(MOTOR_REF &ref);
