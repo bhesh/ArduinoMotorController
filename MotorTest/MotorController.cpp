@@ -17,7 +17,7 @@
  *
  * Returns 0 on success, -1 on error
  */
-int initMotor(MOTOR_REF &ref, int pos_pin, int neg_pin) {
+int motorInit(MOTOR_REF &ref, int pos_pin, int neg_pin) {
 
 	// Get positive pin info
 	ref.pos.ddr = GET_DDR(pos_pin);
@@ -42,7 +42,7 @@ int initMotor(MOTOR_REF &ref, int pos_pin, int neg_pin) {
  *
  * Returns 0 on success, -1 on error
  */
-int delMotor(MOTOR_REF &ref) {
+int motorDel(MOTOR_REF &ref) {
 	if (ref.pos.ddr == 0 || ref.pos.port == 0 || ref.neg.ddr == 0 || ref.neg.port == 0)
 		return -1;
 	*ref.pos.port = PIN_OFF(*ref.pos.port, ref.pos.mask);
@@ -57,7 +57,7 @@ int delMotor(MOTOR_REF &ref) {
  *
  * Returns 0 on success, -1 on error
  */
-int forward(MOTOR_REF &ref) {
+int motorForward(MOTOR_REF &ref) {
 	if (ref.pos.port == 0 || ref.neg.port == 0)
 		return -1;
 	*ref.pos.port = PIN_ON(*ref.pos.port, ref.pos.mask);
@@ -70,7 +70,7 @@ int forward(MOTOR_REF &ref) {
  *
  * Returns 0 on success, -1 on error
  */
-int backward(MOTOR_REF &ref) {
+int motorBackward(MOTOR_REF &ref) {
 	if (ref.pos.port == 0 || ref.neg.port == 0)
 		return -1;
 	*ref.pos.port = PIN_OFF(*ref.pos.port, ref.pos.mask);
@@ -83,51 +83,10 @@ int backward(MOTOR_REF &ref) {
  *
  * Returns 0 on success, -1 on error
  */
-int stop(MOTOR_REF &ref) {
+int motorStop(MOTOR_REF &ref) {
 	if (ref.pos.port == 0 || ref.neg.port == 0)
 		return -1;
 	*ref.pos.port = PIN_OFF(*ref.pos.port, ref.pos.mask);
 	*ref.neg.port = PIN_OFF(*ref.neg.port, ref.neg.mask);
 	return 0;
-}
-
-/**
- * OLD CODE BELOW FOR BACKWARDS COMPATIBILITY
- */
-
-#define MOTOR_A_P 0b00000100
-#define MOTOR_A_N 0b00001000
-#define MOTOR_B_P 0b00010000
-#define MOTOR_B_N 0b00100000
-
-#define MOTOR_STOP(PORT, P, N) (PORT & ~(P | N))
-#define MOTOR_FORWARD(PORT, P, N) ((PORT & ~N) | P)
-#define MOTOR_REVERSE(PORT, P, N) ((PORT & ~P) | N)
-
-void initMotorControlPins() {
-  DDRD = DDRD | (MOTOR_A_P | MOTOR_A_N | MOTOR_B_P | MOTOR_B_N);
-}
-
-void motorAStop() {
-  PORTD = MOTOR_STOP(PORTD, MOTOR_A_P, MOTOR_A_N);
-}
-
-void motorAForward() {
-  PORTD = MOTOR_FORWARD(PORTD, MOTOR_A_P, MOTOR_A_N);
-}
-
-void motorAReverse() {
-  PORTD = MOTOR_REVERSE(PORTD, MOTOR_A_P, MOTOR_A_N);
-}
-
-void motorBStop() {
-  PORTD = MOTOR_STOP(PORTD, MOTOR_B_P, MOTOR_B_N);
-}
-
-void motorBForward() {
-  PORTD = MOTOR_FORWARD(PORTD, MOTOR_B_P, MOTOR_B_N);
-}
-
-void motorBReverse() {
-  PORTD = MOTOR_REVERSE(PORTD, MOTOR_B_P, MOTOR_B_N);
 }
